@@ -77,12 +77,22 @@
     [self.showImgView setUserInteractionEnabled:YES];
     [self.showImgView setImage:self.originalImage];
     
-    // scale to fit the screen
-    CGFloat oriWidth = self.cropFrame.size.width;
-    CGFloat oriHeight = self.originalImage.size.height * (oriWidth / self.originalImage.size.width);
-    CGFloat oriX = self.cropFrame.origin.x + (self.cropFrame.size.width - oriWidth) / 2;
-    CGFloat oriY = self.cropFrame.origin.y + (self.cropFrame.size.height - oriHeight) / 2;
-    self.oldFrame = CGRectMake(oriX, oriY, oriWidth, oriHeight);
+    if (self.originalImage.size.height > self.originalImage.size.width) {
+        CGFloat oriWidth = self.cropFrame.size.width;
+        CGFloat oriHeight = self.originalImage.size.height * (oriWidth / self.originalImage.size.width);
+        CGFloat oriX = self.cropFrame.origin.x + (self.cropFrame.size.width - oriWidth) / 2;
+        CGFloat oriY = self.cropFrame.origin.y + (self.cropFrame.size.height - oriHeight) / 2;
+        self.oldFrame = CGRectMake(oriX, oriY, oriWidth, oriHeight);
+
+    }else{
+        CGFloat oriHeight = self.cropFrame.size.width;
+        CGFloat oriWidth = self.originalImage.size.width * (oriHeight / self.originalImage.size.height);
+        CGFloat oriX = 0.0;
+        CGFloat oriY = self.cropFrame.origin.y + (self.cropFrame.size.height - oriHeight) / 2;
+        self.oldFrame = CGRectMake(oriX, oriY, oriWidth, oriHeight);
+    }
+
+    
     self.latestFrame = self.oldFrame;
     self.showImgView.frame = self.oldFrame;
     self.largeFrame = CGRectMake(0, 0, self.limitRatio * self.oldFrame.size.width, self.limitRatio * self.oldFrame.size.height);
